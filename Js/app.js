@@ -8,6 +8,7 @@ import Theme from "./Theme.js";
 import Divider from "./Divide.js";
 import Prime from "./Prime.js";
 import Exponent from "./Exponent.js";
+import Square from "./Square.js";
 const themeIcon = new Theme();
 document.body.appendChild(themeIcon.render());
 const theme = document.getElementById('theme');
@@ -134,7 +135,9 @@ buttons.forEach(btn => {
           screen.appendChild(exponent.render());
         }else if(operator === '√' && number1Block.classList.value != ''){ // square
           const number = obtainNumber(number1Block);
-          // console.log(number);
+          const square = new Square(number);
+          screen.appendChild(separator());
+          screen.appendChild(square.render());
         }
       }else if(btn.innerHTML === 'X'){ // multiply
         operate = true;
