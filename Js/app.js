@@ -134,7 +134,7 @@ buttons.forEach(btn => {
           screen.appendChild(exponent.render());
         }else if(operator === '√' && number1Block.classList.value != ''){ // square
           const number = obtainNumber(number1Block);
-          console.log(number);
+          // console.log(number);
         }
       }else if(btn.innerHTML === 'X'){ // multiply
         operate = true;
