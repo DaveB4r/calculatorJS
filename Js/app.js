@@ -60,7 +60,7 @@ theme.addEventListener('click', () =>{
 // buttons functions
 buttons.forEach(btn => {  
     btn.addEventListener('click', () => {
-      if(!isNaN(Number(btn.innerHTML))){
+      if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === '.'){
         const myNumber = new NumberCalc(btn.innerHTML);
         if(!operate){
           number1Block.className = 'number1';
