@@ -24,15 +24,15 @@ let operate = false;
 let operator = '';
 const number1Block = document.createElement('div'); 
 const number2Block = document.createElement('div');
-const blockToRender = document.createElement('div');
+const blockToRenderNumber1 = document.createElement('div');
+blockToRenderNumber1.classList.add('number1-block');
+const blockToRenderNumber2 = document.createElement('div');
+blockToRenderNumber2.classList.add('number1-block');
 let number1 = '';
 let number2 = '';
 let results = '';
 let dividing = false;
 let classAdded = '';
-let countNum = 0;
-let restNum = -2;
-let addThousand = false;
 const obtainNumber = (n,r = 0) =>{
   let number = '';
   for(let i = 0; i < n.childNodes.length - r; i++){
@@ -41,7 +41,10 @@ const obtainNumber = (n,r = 0) =>{
   return number;
 }
 const addThousandsSeparator = number =>{
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const [integer, fractional] = number.toString().split(',');
+  const integerWithPoint = integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  if(fractional) return `${integerWithPoint}.${fractional}`;
+  else return integerWithPoint
 }
 const separator = () =>{
   let div = document.createElement('div');
@@ -75,23 +78,13 @@ buttons.forEach(btn => {
           number1Block.className = 'number1';
           if(dividing) classAdded = 'divide_number'
           number1Block.appendChild(myNumber.render(classAdded));
-          console.log(addThousandsSeparator(obtainNumber(number1Block)));
-          console.log();
-          // if(addThousand && btn.innerHTML !== ','){
-          //   const spanThousand = document.createElement('span');
-          //   spanThousand.innerHTML = '.';
-          //   number1Block.insertBefore(spanThousand,number1Block.childNodes[countNum+restNum]);
-          //   console.log();
-          //   restNum ++;
-          // }     
-          addThousand = ++countNum % 3 ===0;
-          blockToRender.innerHTML = input.render(addThousandsSeparator(obtainNumber(number1Block)),'input-number1').outerHTML
-          console.log();     
-          screen.appendChild(blockToRender);  
+          blockToRenderNumber1.innerHTML = input.render(addThousandsSeparator(obtainNumber(number1Block)),'input-number1').outerHTML;   
+          screen.appendChild(blockToRenderNumber1);  
         }else{
           number2Block.className = 'number2';
-          number2Block.appendChild(myNumber.render());
-          screen.appendChild(number2Block);  
+          number2Block.appendChild(myNumber.render(''));
+          blockToRenderNumber2.innerHTML = input.render(addThousandsSeparator(obtainNumber(number2Block)), 'input-number2').outerHTML;
+          screen.appendChild(blockToRenderNumber2);  
         }
       }else if(btn.innerHTML === '←'){
         if(number1Block.childNodes.length > 0 && number2Block.childNodes.length === 0){
@@ -104,8 +97,8 @@ buttons.forEach(btn => {
       }else if(btn.innerHTML === '='){ // Equality
         const totalDiv = document.createElement('div');
         if(number1Block.classList.value != '' && number2Block.classList.value != ''){// if I have 2 blocks
-          totalDiv.className = 'number2';   
-          number1 = obtainNumber(number1Block, 1);
+          totalDiv.className = 'result';   
+          number1 = obtainNumber(number1Block);
           number2 = obtainNumber(number2Block);              
           if(operator === '*'){ // Multiply
             screen.appendChild(separator());
@@ -127,6 +120,7 @@ buttons.forEach(btn => {
             totalDiv.innerHTML = total;
             screen.appendChild(totalDiv);
           }else if(operator === '+'){ // Sum
+            console.log(number1)
             const sum = new Sum(number1, number2);
             screen.appendChild(separator());
             totalDiv.innerHTML = sum.adding();
@@ -172,9 +166,10 @@ buttons.forEach(btn => {
         operator = '+'; 
         const sumRender = document.createElement('span');
         sumRender.className = 'sum-symbol';
-        sumRender.innerHTML = ` +`;       
-        number1Block.appendChild(sumRender);
-        screen.appendChild(number1Block);
+        sumRender.innerHTML = ` +`;    
+        blockToRenderNumber1.appendChild(sumRender);   
+        // number1Block.appendChild(sumRender);
+        screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '-'){ // substracting
         operate = true;
         operator = '-'; 

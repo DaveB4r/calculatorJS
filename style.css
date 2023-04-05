@@ -64,17 +64,17 @@ main{
   height: auto;
   cursor: pointer;
 }
-.number2 {
-  margin-right: 14px;
+.result {
+  margin-right: 2.8rem;
 }
 .sum-symbol{
-  font-size: 15px;
+  font-size: 1.8rem;
   position: relative;
   top: 2px;
   right: 1px;
 }
 hr{
-  margin-left: 135px;
+  margin-left: 7rem;
 }
 .theme-icon{
   cursor: pointer;
@@ -126,14 +126,20 @@ span.divide_number {
   height: 2.8rem;
   font-size: 1.5rem;
   text-align: right;
-  max-width: 100%;
+  max-width: 90%;
   background-color: var(--background-dark);
   color: #fff;
   border-radius: 10rem;
   padding: 0 1rem;
 }
-
+.input-number2{
+  padding-right: 1.8rem;
+}
 .input-number1:focus, .input-number2:focus{
   outline: none;
   border: none;
+}
+.number1-block{
+  display: flex;
+  justify-content: space-evenly;
 }
