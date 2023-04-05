@@ -9,30 +9,39 @@ import Divider from "./Divide.js";
 import Prime from "./Prime.js";
 import Exponent from "./Exponent.js";
 import Square from "./Square.js";
+import Input from "./Input.js";
 const themeIcon = new Theme();
 document.body.appendChild(themeIcon.render());
 const theme = document.getElementById('theme');
 const root = document.getElementById('root');
 const screen = new Screen().render();
 const keyword = new Keyword().render();
+const input = new Input;
 root.appendChild(screen);
 root.appendChild(keyword);
 const buttons = document.querySelectorAll('.button-keyword');
 let operate = false;
 let operator = '';
-const number1Block = document.createElement('div');
+const number1Block = document.createElement('div'); 
 const number2Block = document.createElement('div');
+const blockToRender = document.createElement('div');
 let number1 = '';
 let number2 = '';
 let results = '';
 let dividing = false;
 let classAdded = '';
+let countNum = 0;
+let restNum = -2;
+let addThousand = false;
 const obtainNumber = (n,r = 0) =>{
   let number = '';
   for(let i = 0; i < n.childNodes.length - r; i++){
     number += n.childNodes[i].innerHTML;
   }
   return number;
+}
+const addThousandsSeparator = number =>{
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 const separator = () =>{
   let div = document.createElement('div');
@@ -60,13 +69,25 @@ theme.addEventListener('click', () =>{
 // buttons functions
 buttons.forEach(btn => {  
     btn.addEventListener('click', () => {
-      if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === '.'){
+      if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === ','){
         const myNumber = new NumberCalc(btn.innerHTML);
         if(!operate){
           number1Block.className = 'number1';
           if(dividing) classAdded = 'divide_number'
           number1Block.appendChild(myNumber.render(classAdded));
-          screen.appendChild(number1Block);  
+          console.log(addThousandsSeparator(obtainNumber(number1Block)));
+          console.log();
+          // if(addThousand && btn.innerHTML !== ','){
+          //   const spanThousand = document.createElement('span');
+          //   spanThousand.innerHTML = '.';
+          //   number1Block.insertBefore(spanThousand,number1Block.childNodes[countNum+restNum]);
+          //   console.log();
+          //   restNum ++;
+          // }     
+          addThousand = ++countNum % 3 ===0;
+          blockToRender.innerHTML = input.render(addThousandsSeparator(obtainNumber(number1Block)),'input-number1').outerHTML
+          console.log();     
+          screen.appendChild(blockToRender);  
         }else{
           number2Block.className = 'number2';
           number2Block.appendChild(myNumber.render());

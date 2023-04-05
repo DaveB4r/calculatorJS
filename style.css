@@ -1,6 +1,8 @@
 :root{
   --border: 1px solid #c7c7c7;
   --box-shadow : 0px 0px 20px rgba(0, 0, 0, 0.4);
+  --background-dark : #1e2127;
+  --background-light : #f7f7f7;
 }
 *{
   margin: 0;
@@ -36,6 +38,7 @@ main{
 .container-screen{
   width: 85%;
   height: 40%;
+  font-size: 1.8rem;
   margin: 1rem auto;
   border-radius: 1rem;
   border: var(--border);
@@ -94,11 +97,11 @@ span.divide_number {
   margin-left: 10px;
 }
 .dark-theme{
-  background : #1e2127;
+  background : var(--background-dark);
   color : #fff;
 }
 .light-theme{
-  background : #fff;
+  background :  var(--background-light);
   color : #000;
 }
 .btn-dark{
@@ -116,4 +119,21 @@ span.divide_number {
   float: right;
   right: 3px;
   position: relative;
+}
+.input-number1, .input-number2{
+  border: none;
+  width: 20rem;
+  height: 2.8rem;
+  font-size: 1.5rem;
+  text-align: right;
+  max-width: 100%;
+  background-color: var(--background-dark);
+  color: #fff;
+  border-radius: 10rem;
+  padding: 0 1rem;
+}
+
+.input-number1:focus, .input-number2:focus{
+  outline: none;
+  border: none;
 }

@@ -34,7 +34,7 @@ export default class Keyword {
         <div class="button-keyword btn-dark" title="Multiply" id="product">X</div>
       </div>
       <div class="row-keyword">
-        <div class="button-keyword btn-dark">.</div>
+        <div class="button-keyword btn-dark">,</div>
         <div class="button-keyword btn-dark">0</div>
         <div class="button-keyword btn-dark" title="Equality">=</div>
         <div class="button-keyword btn-dark" title="Divide">/</div>
