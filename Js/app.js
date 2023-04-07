@@ -91,20 +91,35 @@ buttons.forEach(btn => {
           blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
           screen.appendChild(blockToRenderNumber2);  
         }else{
-          let numberToRender = inputNumber1.get();
-          numberToRender = numberToRender.replaceAll('.','');
-          numberToRender = numberToRender.substring(0, numberToRender.length - 1);
-          numbersArray.pop();
-          inputNumber1.set(addThousandsSeparator(numberToRender));
-          blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
-          screen.appendChild(blockToRenderNumber1);
-          blockToRenderNumber2.remove();
+          if(blockToRenderNumber1.childNodes[1]){
+            blockToRenderNumber1.childNodes[1].remove();
+            operate = false;
+          } 
+          else{
+            let numberToRender = inputNumber1.get();
+            numberToRender = numberToRender.replaceAll('.','');
+            numberToRender = numberToRender.substring(0, numberToRender.length - 1);
+            numbersArray.pop();
+            inputNumber1.set(addThousandsSeparator(numberToRender));
+            blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
+            screen.appendChild(blockToRenderNumber1);
+            blockToRenderNumber2.remove();
+          }          
         }
         
       }else if(btn.innerHTML === 'C'){ // Clear
         window.location.reload();
       }else if(btn.innerHTML === '='){ // Equality
         const totalDiv = document.createElement('div');
+        totalDiv.classList.add('result');
+        if(operate && operator !== ''){ // new way
+          if(operator === '+'){ // Sum
+            const sum = new Sum(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+            screen.appendChild(separator());
+            totalDiv.innerHTML = sum.adding();
+            screen.appendChild(totalDiv);
+          }
+        }
         if(number1Block.classList.value != '' && number2Block.classList.value != ''){// if I have 2 blocks
           totalDiv.className = 'result';   
           number1 = obtainNumber(number1Block);
@@ -129,10 +144,11 @@ buttons.forEach(btn => {
             totalDiv.innerHTML = total;
             screen.appendChild(totalDiv);
           }else if(operator === '+'){ // Sum
-            const sum = new Sum(number1, number2);
-            screen.appendChild(separator());
-            totalDiv.innerHTML = sum.adding();
-            screen.appendChild(totalDiv);
+            console.log('adding..');
+            // const sum = new Sum(number1, number2);
+            // screen.appendChild(separator());
+            // totalDiv.innerHTML = sum.adding();
+            // screen.appendChild(totalDiv);
           }else if(operator === '-'){ // Substract
             const subs = new Substract(number1, number2);
             screen.appendChild(separator());
@@ -176,8 +192,7 @@ buttons.forEach(btn => {
         const sumRender = document.createElement('span');
         sumRender.className = 'sum-symbol';
         sumRender.innerHTML = ` +`;    
-        blockToRenderNumber1.appendChild(sumRender);   
-        // number1Block.appendChild(sumRender);
+        blockToRenderNumber1.appendChild(sumRender);
         screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '-'){ // substracting
         operate = true;
