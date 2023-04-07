@@ -1,7 +1,13 @@
 export default class Input{
-  render(number, className){
+  set(number){
+    return this.number = number;
+  }
+  get(){
+    return this.number;
+  }
+  render(className){
     let input = document.createElement('input');
-    input.setAttribute('value', number);
+    input.setAttribute('value', this.number);
     input.className = className;
     input.type = 'text';
     return input;

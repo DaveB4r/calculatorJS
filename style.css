@@ -139,7 +139,7 @@ span.divide_number {
   outline: none;
   border: none;
 }
-.number1-block{
+.number-block{
   display: flex;
   justify-content: space-evenly;
 }

@@ -1,7 +1,6 @@
 import Screen from "./Screen.js";
 import Keyword from "./Keyword.js";
 import Multiply from "./Multiply.js";
-import NumberCalc from "./NumberCalc.js";
 import Sum from "./sum.js";
 import Substract from "./Substract.js";
 import Theme from "./Theme.js";
@@ -16,7 +15,8 @@ const theme = document.getElementById('theme');
 const root = document.getElementById('root');
 const screen = new Screen().render();
 const keyword = new Keyword().render();
-const input = new Input;
+const inputNumber1 = new Input;
+const inputNumber2 = new Input;
 root.appendChild(screen);
 root.appendChild(keyword);
 const buttons = document.querySelectorAll('.button-keyword');
@@ -24,15 +24,15 @@ let operate = false;
 let operator = '';
 const number1Block = document.createElement('div'); 
 const number2Block = document.createElement('div');
+let numbersArray = [];
+let numberToRender = 0;
 const blockToRenderNumber1 = document.createElement('div');
-blockToRenderNumber1.classList.add('number1-block');
+blockToRenderNumber1.classList.add('number-block');
 const blockToRenderNumber2 = document.createElement('div');
-blockToRenderNumber2.classList.add('number1-block');
+blockToRenderNumber2.classList.add('number-block');
 let number1 = '';
 let number2 = '';
 let results = '';
-let dividing = false;
-let classAdded = '';
 const obtainNumber = (n,r = 0) =>{
   let number = '';
   for(let i = 0; i < n.childNodes.length - r; i++){
@@ -73,25 +73,34 @@ theme.addEventListener('click', () =>{
 buttons.forEach(btn => {  
     btn.addEventListener('click', () => {
       if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === ','){
-        const myNumber = new NumberCalc(btn.innerHTML);
+        numbersArray.push(btn.innerHTML);
+        numberToRender = numbersArray.join('');
         if(!operate){
-          number1Block.className = 'number1';
-          if(dividing) classAdded = 'divide_number'
-          number1Block.appendChild(myNumber.render(classAdded));
-          blockToRenderNumber1.innerHTML = input.render(addThousandsSeparator(obtainNumber(number1Block)),'input-number1').outerHTML;   
+          inputNumber1.set(addThousandsSeparator(numberToRender));
+          blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
           screen.appendChild(blockToRenderNumber1);  
         }else{
-          number2Block.className = 'number2';
-          number2Block.appendChild(myNumber.render(''));
-          blockToRenderNumber2.innerHTML = input.render(addThousandsSeparator(obtainNumber(number2Block)), 'input-number2').outerHTML;
+          inputNumber2.set(addThousandsSeparator(numberToRender));
+          blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
           screen.appendChild(blockToRenderNumber2);  
         }
       }else if(btn.innerHTML === '←'){
-        if(number1Block.childNodes.length > 0 && number2Block.childNodes.length === 0){
-          if(isNaN(number1Block.childNodes[number1Block.childNodes.length - 1])) operate = false; 
-          number1Block.childNodes[number1Block.childNodes.length - 1].remove();
-        } 
-        if(number2Block.childNodes.length > 0) number2Block.childNodes[number2Block.childNodes.length - 1].remove();
+        if(inputNumber2.get() !== undefined && inputNumber2.get() !== ''){
+          numbersArray.pop();
+          inputNumber2.set(addThousandsSeparator(numbersArray.join('')));
+          blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
+          screen.appendChild(blockToRenderNumber2);  
+        }else{
+          let numberToRender = inputNumber1.get();
+          numberToRender = numberToRender.replaceAll('.','');
+          numberToRender = numberToRender.substring(0, numberToRender.length - 1);
+          numbersArray.pop();
+          inputNumber1.set(addThousandsSeparator(numberToRender));
+          blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
+          screen.appendChild(blockToRenderNumber1);
+          blockToRenderNumber2.remove();
+        }
+        
       }else if(btn.innerHTML === 'C'){ // Clear
         window.location.reload();
       }else if(btn.innerHTML === '='){ // Equality
@@ -120,7 +129,6 @@ buttons.forEach(btn => {
             totalDiv.innerHTML = total;
             screen.appendChild(totalDiv);
           }else if(operator === '+'){ // Sum
-            console.log(number1)
             const sum = new Sum(number1, number2);
             screen.appendChild(separator());
             totalDiv.innerHTML = sum.adding();
@@ -163,6 +171,7 @@ buttons.forEach(btn => {
         screen.appendChild(number1Block);
       }else if(btn.innerHTML === '+'){ // adding
         operate = true;
+        numbersArray = [];
         operator = '+'; 
         const sumRender = document.createElement('span');
         sumRender.className = 'sum-symbol';
