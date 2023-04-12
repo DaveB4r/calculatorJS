@@ -120,8 +120,8 @@ buttons.forEach(btn => {
             screen.appendChild(totalDiv);
           }else if(operator === '-'){
             const subs = new Substract(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-            screen.appendChild(separator());
             totalDiv.innerHTML = subs.substracting();
+            screen.appendChild(separator());
             screen.appendChild(totalDiv);
           }else if(operator === '*'){
             const multi = new Multiply(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
@@ -142,24 +142,17 @@ buttons.forEach(btn => {
             }
             totalDiv.innerHTML = total;
             screen.appendChild(totalDiv);
+          }else if(operator === '/'){
+            const divide = new Divider(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+            totalDiv.innerHTML = divide.render();
+            screen.appendChild(separator());
+            screen.appendChild(totalDiv);
           }
         }
         if(number1Block.classList.value != '' && number2Block.classList.value != ''){// old way
           totalDiv.className = 'result';   
           number1 = obtainNumber(number1Block);
           number2 = obtainNumber(number2Block);              
-        }else if(operator === '/' && number1Block.classList.value != ''){ // Divide
-          let sentence = number1Block.childNodes;
-          let dividend = '';
-          let divider = '';
-          sentence.forEach(element=>{
-            if(element.className === '') dividend += element.textContent;
-            if(element.className === 'divide_number') divider += element.textContent;
-          })
-          const divide = new Divider(dividend, divider);
-          totalDiv.className = 'result-division';
-          totalDiv.innerHTML = divide.render();
-          screen.appendChild(totalDiv);
         }else if(operator === '^' && number1Block.classList.value != ''){ // Exponent
           const number = obtainNumber(number1Block);  
           const exponent = new Exponent(number);
@@ -197,12 +190,15 @@ buttons.forEach(btn => {
         lessRender.innerHTML = ` -`;       
         blockToRenderNumber1.appendChild(lessRender);
         screen.appendChild(blockToRenderNumber1);
-      }else if(btn.innerHTML === '/'){ // multiply
-        dividing = true;
+      }else if(btn.innerHTML === '/'){ // dividing
+        operate = true;
+        numbersArray = [];
         operator = '/'; 
         const divideRender = document.createElement('span');
-        divideRender.className = 'divideSeparator';      
-        number1Block.appendChild(divideRender);
+        divideRender.className = 'sum-symbol';
+        divideRender.innerHTML = ' ÷'      
+        blockToRenderNumber1.appendChild(divideRender);
+        screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '^'){ // exponent
         operator = '^'; 
         const exponentRender = document.createElement('span');
