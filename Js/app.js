@@ -118,21 +118,20 @@ buttons.forEach(btn => {
             screen.appendChild(separator());
             totalDiv.innerHTML = sum.adding();
             screen.appendChild(totalDiv);
-          }
-        }
-        if(number1Block.classList.value != '' && number2Block.classList.value != ''){// if I have 2 blocks
-          totalDiv.className = 'result';   
-          number1 = obtainNumber(number1Block);
-          number2 = obtainNumber(number2Block);              
-          if(operator === '*'){ // Multiply
+          }else if(operator === '-'){
+            const subs = new Substract(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
             screen.appendChild(separator());
-            const multi = new Multiply(number1, number2);
+            totalDiv.innerHTML = subs.substracting();
+            screen.appendChild(totalDiv);
+          }else if(operator === '*'){
+            const multi = new Multiply(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+            screen.appendChild(separator());
             let total = 0;
             results = multi.processMultiply();
             results.forEach(num => {              
               if(results.length > 1){
                 const resultDiv = document.createElement('div');
-                resultDiv.className = 'number2';
+                resultDiv.className = 'result';
                 resultDiv.innerHTML = num;
                 screen.appendChild(resultDiv);
               }
@@ -143,18 +142,12 @@ buttons.forEach(btn => {
             }
             totalDiv.innerHTML = total;
             screen.appendChild(totalDiv);
-          }else if(operator === '+'){ // Sum
-            console.log('adding..');
-            // const sum = new Sum(number1, number2);
-            // screen.appendChild(separator());
-            // totalDiv.innerHTML = sum.adding();
-            // screen.appendChild(totalDiv);
-          }else if(operator === '-'){ // Substract
-            const subs = new Substract(number1, number2);
-            screen.appendChild(separator());
-            totalDiv.innerHTML = subs.substracting();
-            screen.appendChild(totalDiv);
           }
+        }
+        if(number1Block.classList.value != '' && number2Block.classList.value != ''){// old way
+          totalDiv.className = 'result';   
+          number1 = obtainNumber(number1Block);
+          number2 = obtainNumber(number2Block);              
         }else if(operator === '/' && number1Block.classList.value != ''){ // Divide
           let sentence = number1Block.childNodes;
           let dividend = '';
@@ -180,11 +173,12 @@ buttons.forEach(btn => {
         }
       }else if(btn.innerHTML === 'X'){ // multiply
         operate = true;
+        numbersArray = [];
         operator = '*'; 
         const multiRender = document.createElement('span');
-        multiRender.innerHTML = ` X`;       
-        number1Block.appendChild(multiRender);
-        screen.appendChild(number1Block);
+        multiRender.innerHTML = ` x`;       
+        blockToRenderNumber1.appendChild(multiRender);
+        screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '+'){ // adding
         operate = true;
         numbersArray = [];
@@ -196,12 +190,13 @@ buttons.forEach(btn => {
         screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '-'){ // substracting
         operate = true;
+        numbersArray = [];
         operator = '-'; 
         const lessRender = document.createElement('span');
         lessRender.className = 'sum-symbol';
         lessRender.innerHTML = ` -`;       
-        number1Block.appendChild(lessRender);
-        screen.appendChild(number1Block);
+        blockToRenderNumber1.appendChild(lessRender);
+        screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '/'){ // multiply
         dividing = true;
         operator = '/'; 
