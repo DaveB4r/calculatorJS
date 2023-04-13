@@ -22,24 +22,13 @@ root.appendChild(keyword);
 const buttons = document.querySelectorAll('.button-keyword');
 let operate = false;
 let operator = '';
-const number1Block = document.createElement('div'); 
-const number2Block = document.createElement('div');
 let numbersArray = [];
 let numberToRender = 0;
 const blockToRenderNumber1 = document.createElement('div');
 blockToRenderNumber1.classList.add('number-block');
 const blockToRenderNumber2 = document.createElement('div');
 blockToRenderNumber2.classList.add('number-block');
-let number1 = '';
-let number2 = '';
 let results = '';
-const obtainNumber = (n,r = 0) =>{
-  let number = '';
-  for(let i = 0; i < n.childNodes.length - r; i++){
-    number += n.childNodes[i].innerHTML;
-  }
-  return number;
-}
 const addThousandsSeparator = number =>{
   const [integer, fractional] = number.toString().split(',');
   const integerWithPoint = integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -68,45 +57,63 @@ theme.addEventListener('click', () =>{
       btn.classList.toggle("btn-light");
     })
   }
-})
+});
+// adding numbers to calculator
+const addNumberToInput = num => {
+  numbersArray.push(num);
+  numberToRender = numbersArray.join('');
+  if(!operate){
+    inputNumber1.set(addThousandsSeparator(numberToRender));
+    blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
+    screen.appendChild(blockToRenderNumber1);  
+  }else{
+    inputNumber2.set(addThousandsSeparator(numberToRender));
+    blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
+    screen.appendChild(blockToRenderNumber2);  
+  }
+}
+const removing = () =>{
+  if(inputNumber2.get() !== undefined && inputNumber2.get() !== ''){
+    numbersArray.pop();
+    inputNumber2.set(addThousandsSeparator(numbersArray.join('')));
+    blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
+    screen.appendChild(blockToRenderNumber2);  
+  }else{
+    if(blockToRenderNumber1.childNodes[1]){
+      blockToRenderNumber1.childNodes[1].remove();
+      operate = false;
+    } 
+    else{
+      let numberToRender = inputNumber1.get();
+      numberToRender = numberToRender.replaceAll('.','');
+      numberToRender = numberToRender.substring(0, numberToRender.length - 1);
+      numbersArray.pop();
+      inputNumber1.set(addThousandsSeparator(numberToRender));
+      blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
+      screen.appendChild(blockToRenderNumber1);
+      blockToRenderNumber2.remove();
+    }          
+  }
+}
+//working with keyboard
+document.addEventListener('keydown', e =>{
+  let keyValue = e.key;
+  console.log(keyValue);
+  if(!isNaN(keyValue)){
+    addNumberToInput(keyValue);    
+  }else if(keyValue === 'Escape'){
+    window.location.reload();
+  }else if(keyValue === 'Backspace'){
+    removing();
+  }
+});
 // buttons functions
 buttons.forEach(btn => {  
     btn.addEventListener('click', () => {
       if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === ','){
-        numbersArray.push(btn.innerHTML);
-        numberToRender = numbersArray.join('');
-        if(!operate){
-          inputNumber1.set(addThousandsSeparator(numberToRender));
-          blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
-          screen.appendChild(blockToRenderNumber1);  
-        }else{
-          inputNumber2.set(addThousandsSeparator(numberToRender));
-          blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
-          screen.appendChild(blockToRenderNumber2);  
-        }
+        addNumberToInput(btn.innerHTML);
       }else if(btn.innerHTML === '←'){
-        if(inputNumber2.get() !== undefined && inputNumber2.get() !== ''){
-          numbersArray.pop();
-          inputNumber2.set(addThousandsSeparator(numbersArray.join('')));
-          blockToRenderNumber2.innerHTML = inputNumber2.render('input-number2').outerHTML;
-          screen.appendChild(blockToRenderNumber2);  
-        }else{
-          if(blockToRenderNumber1.childNodes[1]){
-            blockToRenderNumber1.childNodes[1].remove();
-            operate = false;
-          } 
-          else{
-            let numberToRender = inputNumber1.get();
-            numberToRender = numberToRender.replaceAll('.','');
-            numberToRender = numberToRender.substring(0, numberToRender.length - 1);
-            numbersArray.pop();
-            inputNumber1.set(addThousandsSeparator(numberToRender));
-            blockToRenderNumber1.innerHTML = inputNumber1.render('input-number1').outerHTML;   
-            screen.appendChild(blockToRenderNumber1);
-            blockToRenderNumber2.remove();
-          }          
-        }
-        
+        removing();        
       }else if(btn.innerHTML === 'C'){ // Clear
         window.location.reload();
       }else if(btn.innerHTML === '='){ // Equality
@@ -148,19 +155,12 @@ buttons.forEach(btn => {
             screen.appendChild(separator());
             screen.appendChild(totalDiv);
           }
-        }
-        if(number1Block.classList.value != '' && number2Block.classList.value != ''){// old way
-          totalDiv.className = 'result';   
-          number1 = obtainNumber(number1Block);
-          number2 = obtainNumber(number2Block);              
-        }else if(operator === '^' && number1Block.classList.value != ''){ // Exponent
-          const number = obtainNumber(number1Block);  
-          const exponent = new Exponent(number);
+        }else if(operator === '^'){ // Exponent
+          const exponent = new Exponent(numberToRender);
           screen.appendChild(separator());
           screen.appendChild(exponent.render());
-        }else if(operator === '√' && number1Block.classList.value != ''){ // square
-          const number = obtainNumber(number1Block);
-          const square = new Square(number);
+        }else if(operator === '√'){ // square
+          const square = new Square(numberToRender);
           screen.appendChild(separator());
           screen.appendChild(square.render());
         }
@@ -202,23 +202,20 @@ buttons.forEach(btn => {
       }else if(btn.innerHTML === '^'){ // exponent
         operator = '^'; 
         const exponentRender = document.createElement('span');
-        exponentRender.innerHTML = ` ^`;       
-        number1Block.appendChild(exponentRender);
-        screen.appendChild(number1Block);
+        exponentRender.innerHTML = '^'; 
+        numbersArray.push('^');      
+        blockToRenderNumber1.appendChild(exponentRender);
+        screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === '√'){
         operator = '√';
         const sqrtRender = document.createElement('span');
         sqrtRender.innerHTML = ` √`;
-        number1Block.appendChild(sqrtRender);
-        screen.appendChild(number1Block);
+        numbersArray.push('√');
+        blockToRenderNumber1.appendChild(sqrtRender);
+        screen.appendChild(blockToRenderNumber1);
       }else if(btn.innerHTML === 'P'){ // Prime Number
-        if(number1Block.classList.value != ''){
-          number1 = obtainNumber(number1Block);
-          const numberPrime = new Prime(number1);
-          screen.appendChild(numberPrime.render()); 
-        }
+        const numberPrime = new Prime(numbersArray.join(''));
+        screen.appendChild(numberPrime.render());
       }
     });
 });
-
-

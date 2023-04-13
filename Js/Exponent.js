@@ -8,6 +8,7 @@ export default class Exponent{
   }
   render(){
     const div = document.createElement('div');
+    div.className = 'result';
     div.innerHTML = this.descompose();
     return div;
   }
