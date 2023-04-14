@@ -72,6 +72,7 @@ const addNumberToInput = num => {
     screen.appendChild(blockToRenderNumber2);  
   }
 }
+// backSpace
 const removing = () =>{
   if(inputNumber2.get() !== undefined && inputNumber2.get() !== ''){
     numbersArray.pop();
@@ -95,16 +96,103 @@ const removing = () =>{
     }          
   }
 }
+//Render basics operations
+const renderOperating = symbol => {
+  let symbolToRender = '';
+  switch (symbol) {
+    case '*':
+      symbolToRender = ' x'
+      break;
+    case '+':
+      symbolToRender = ' +'
+      break;
+    case '-':
+      symbolToRender = ' -'
+      break;
+    case '/':
+      symbolToRender = ' ÷'
+      break;
+  
+    default:
+      break;
+  }
+  operate = true;
+  numbersArray = [];
+  operator = symbol; 
+  const renderOperator = document.createElement('span');
+  renderOperator.innerHTML = symbolToRender;       
+  blockToRenderNumber1.appendChild(renderOperator);
+  screen.appendChild(blockToRenderNumber1);
+  
+}
+const operating = () =>{
+  const totalDiv = document.createElement('div');
+  totalDiv.classList.add('result');
+  if(operate && operator !== ''){ // new way
+    if(operator === '+'){ // Sum
+      const sum = new Sum(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+      screen.appendChild(separator());
+      totalDiv.innerHTML = sum.adding();
+      screen.appendChild(totalDiv);
+    }else if(operator === '-'){
+      const subs = new Substract(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+      totalDiv.innerHTML = subs.substracting();
+      screen.appendChild(separator());
+      screen.appendChild(totalDiv);
+    }else if(operator === '*'){
+      const multi = new Multiply(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+      screen.appendChild(separator());
+      let total = 0;
+      results = multi.processMultiply();
+      results.forEach(num => {              
+        if(results.length > 1){
+          const resultDiv = document.createElement('div');
+          resultDiv.className = 'result';
+          resultDiv.innerHTML = num;
+          screen.appendChild(resultDiv);
+        }
+        total += Number(num);
+      });
+      if(results.length > 1){
+        screen.appendChild(separator());           
+      }
+      totalDiv.innerHTML = total;
+      screen.appendChild(totalDiv);
+    }else if(operator === '/'){
+      const divide = new Divider(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+      totalDiv.innerHTML = divide.render();
+      screen.appendChild(separator());
+      screen.appendChild(totalDiv);
+    }
+  }else if(operator === '^'){ // Exponent
+    const exponent = new Exponent(numberToRender);
+    screen.appendChild(separator());
+    screen.appendChild(exponent.render());
+  }else if(operator === '√'){ // square
+    const square = new Square(numberToRender);
+    screen.appendChild(separator());
+    screen.appendChild(square.render());
+  }
+}
 //working with keyboard
 document.addEventListener('keydown', e =>{
   let keyValue = e.key;
-  console.log(keyValue);
   if(!isNaN(keyValue)){
     addNumberToInput(keyValue);    
   }else if(keyValue === 'Escape'){
     window.location.reload();
   }else if(keyValue === 'Backspace'){
     removing();
+  }else if(keyValue === '*'){
+    renderOperating('*');
+  }else if(keyValue === '+'){
+    renderOperating('+');
+  }else if(keyValue === '-'){
+    renderOperating('-');
+  }else if(keyValue === '/'){
+    renderOperating('/');
+  }else if(keyValue === 'Enter'){
+    operating();
   }
 });
 // buttons functions
@@ -112,93 +200,20 @@ buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === ','){
         addNumberToInput(btn.innerHTML);
-      }else if(btn.innerHTML === '←'){
+      }else if(btn.innerHTML === '←'){ //Back space
         removing();        
       }else if(btn.innerHTML === 'C'){ // Clear
         window.location.reload();
       }else if(btn.innerHTML === '='){ // Equality
-        const totalDiv = document.createElement('div');
-        totalDiv.classList.add('result');
-        if(operate && operator !== ''){ // new way
-          if(operator === '+'){ // Sum
-            const sum = new Sum(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-            screen.appendChild(separator());
-            totalDiv.innerHTML = sum.adding();
-            screen.appendChild(totalDiv);
-          }else if(operator === '-'){
-            const subs = new Substract(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-            totalDiv.innerHTML = subs.substracting();
-            screen.appendChild(separator());
-            screen.appendChild(totalDiv);
-          }else if(operator === '*'){
-            const multi = new Multiply(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-            screen.appendChild(separator());
-            let total = 0;
-            results = multi.processMultiply();
-            results.forEach(num => {              
-              if(results.length > 1){
-                const resultDiv = document.createElement('div');
-                resultDiv.className = 'result';
-                resultDiv.innerHTML = num;
-                screen.appendChild(resultDiv);
-              }
-              total += Number(num);
-            });
-            if(results.length > 1){
-              screen.appendChild(separator());           
-            }
-            totalDiv.innerHTML = total;
-            screen.appendChild(totalDiv);
-          }else if(operator === '/'){
-            const divide = new Divider(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-            totalDiv.innerHTML = divide.render();
-            screen.appendChild(separator());
-            screen.appendChild(totalDiv);
-          }
-        }else if(operator === '^'){ // Exponent
-          const exponent = new Exponent(numberToRender);
-          screen.appendChild(separator());
-          screen.appendChild(exponent.render());
-        }else if(operator === '√'){ // square
-          const square = new Square(numberToRender);
-          screen.appendChild(separator());
-          screen.appendChild(square.render());
-        }
+        operating();
       }else if(btn.innerHTML === 'X'){ // multiply
-        operate = true;
-        numbersArray = [];
-        operator = '*'; 
-        const multiRender = document.createElement('span');
-        multiRender.innerHTML = ` x`;       
-        blockToRenderNumber1.appendChild(multiRender);
-        screen.appendChild(blockToRenderNumber1);
+        renderOperating('*');
       }else if(btn.innerHTML === '+'){ // adding
-        operate = true;
-        numbersArray = [];
-        operator = '+'; 
-        const sumRender = document.createElement('span');
-        sumRender.className = 'sum-symbol';
-        sumRender.innerHTML = ` +`;    
-        blockToRenderNumber1.appendChild(sumRender);
-        screen.appendChild(blockToRenderNumber1);
+        renderOperating('+');
       }else if(btn.innerHTML === '-'){ // substracting
-        operate = true;
-        numbersArray = [];
-        operator = '-'; 
-        const lessRender = document.createElement('span');
-        lessRender.className = 'sum-symbol';
-        lessRender.innerHTML = ` -`;       
-        blockToRenderNumber1.appendChild(lessRender);
-        screen.appendChild(blockToRenderNumber1);
+        renderOperating('-');
       }else if(btn.innerHTML === '/'){ // dividing
-        operate = true;
-        numbersArray = [];
-        operator = '/'; 
-        const divideRender = document.createElement('span');
-        divideRender.className = 'sum-symbol';
-        divideRender.innerHTML = ' ÷'      
-        blockToRenderNumber1.appendChild(divideRender);
-        screen.appendChild(blockToRenderNumber1);
+        renderOperating('/');
       }else if(btn.innerHTML === '^'){ // exponent
         operator = '^'; 
         const exponentRender = document.createElement('span');
@@ -206,7 +221,7 @@ buttons.forEach(btn => {
         numbersArray.push('^');      
         blockToRenderNumber1.appendChild(exponentRender);
         screen.appendChild(blockToRenderNumber1);
-      }else if(btn.innerHTML === '√'){
+      }else if(btn.innerHTML === '√'){ // square
         operator = '√';
         const sqrtRender = document.createElement('span');
         sqrtRender.innerHTML = ` √`;
