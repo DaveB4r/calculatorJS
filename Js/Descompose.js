@@ -18,6 +18,7 @@ export default class Descompose{
     return pimeArray;    
   }
   descompose(num){
+    console.log(num);
     if(num != 1){
       for(let prime of this.primeNumbers()){
         if(num % prime === 0){
@@ -25,14 +26,10 @@ export default class Descompose{
           this.descomposition.push([num,prime]);
           this.descompose(result);
           break;
-        }else{
-          let result = num / num;
-          this.descomposition.push([num,num]);
-          this.descompose(result);
-          break;
         }
       }
     }
+    if(this.descomposition.length < 1) this.descomposition.push([num,num]);
     return this.descomposition;
   }
 
@@ -46,4 +43,3 @@ export default class Descompose{
     return div;
   }
 }
-  
