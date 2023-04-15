@@ -9,6 +9,7 @@ import Prime from "./Prime.js";
 import Exponent from "./Exponent.js";
 import Square from "./Square.js";
 import Input from "./Input.js";
+import Descompose from "./Descompose.js";
 const themeIcon = new Theme();
 document.body.appendChild(themeIcon.render());
 const theme = document.getElementById('theme');
@@ -32,7 +33,7 @@ let results = '';
 const addThousandsSeparator = number =>{
   const [integer, fractional] = number.toString().split(',');
   const integerWithPoint = integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  if(fractional) return `${integerWithPoint}.${fractional}`;
+  if(fractional) return `${integerWithPoint},${fractional}`;
   else return integerWithPoint
 }
 const separator = () =>{
@@ -129,18 +130,20 @@ const operating = () =>{
   const totalDiv = document.createElement('div');
   totalDiv.classList.add('result');
   if(operate && operator !== ''){ // new way
+    const number1 = inputNumber1.get().replaceAll('.','').replaceAll(',','.');
+    const number2 = inputNumber2.get().replaceAll('.','').replaceAll(',','.');
     if(operator === '+'){ // Sum
-      const sum = new Sum(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+      const sum = new Sum(number1, number2);
       screen.appendChild(separator());
-      totalDiv.innerHTML = sum.adding();
+      totalDiv.innerHTML = addThousandsSeparator(sum.adding());
       screen.appendChild(totalDiv);
     }else if(operator === '-'){
-      const subs = new Substract(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-      totalDiv.innerHTML = subs.substracting();
+      const subs = new Substract(number1, number2);
+      totalDiv.innerHTML = addThousandsSeparator(subs.substracting());
       screen.appendChild(separator());
       screen.appendChild(totalDiv);
     }else if(operator === '*'){
-      const multi = new Multiply(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
+      const multi = new Multiply(number1, number2);
       screen.appendChild(separator());
       let total = 0;
       results = multi.processMultiply();
@@ -156,11 +159,11 @@ const operating = () =>{
       if(results.length > 1){
         screen.appendChild(separator());           
       }
-      totalDiv.innerHTML = total;
+      totalDiv.innerHTML = addThousandsSeparator(total);
       screen.appendChild(totalDiv);
     }else if(operator === '/'){
-      const divide = new Divider(inputNumber1.get().replaceAll('.',''), inputNumber2.get().replaceAll('.',''));
-      totalDiv.innerHTML = divide.render();
+      const divide = new Divider(number1, number2);
+      totalDiv.innerHTML = addThousandsSeparator(divide.render());
       screen.appendChild(separator());
       screen.appendChild(totalDiv);
     }
@@ -193,9 +196,12 @@ document.addEventListener('keydown', e =>{
     renderOperating('/');
   }else if(keyValue === 'Enter'){
     operating();
+  }else if(keyValue === '.'){
+    addNumberToInput(',');
   }
 });
 // buttons functions
+
 buttons.forEach(btn => {  
     btn.addEventListener('click', () => {
       if(!isNaN(Number(btn.innerHTML)) || btn.innerHTML === ','){
@@ -231,6 +237,9 @@ buttons.forEach(btn => {
       }else if(btn.innerHTML === 'P'){ // Prime Number
         const numberPrime = new Prime(numbersArray.join(''));
         screen.appendChild(numberPrime.render());
+      }else if(btn.innerHTML === 'D'){ // Descomposing
+        const numberToDescompose = new Descompose();
+        screen.appendChild(numberToDescompose.render(numbersArray.join('')));
       }
     });
 });
