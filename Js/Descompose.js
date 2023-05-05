@@ -18,7 +18,6 @@ export default class Descompose{
     return pimeArray;    
   }
   descompose(num){
-    console.log(num);
     if(num != 1){
       for(let prime of this.primeNumbers()){
         if(num % prime === 0){

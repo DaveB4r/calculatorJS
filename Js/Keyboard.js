@@ -1,4 +1,4 @@
-export default class Keyword {
+export default class Keyboard {
   render(){
     let container = document.createElement('div');
     let content = `
@@ -7,7 +7,7 @@ export default class Keyword {
         <div class="button-keyword btn-dark" title="Clear">C</div>
         <div class="button-keyword btn-dark" title="Square Root">&#8730;</div>
         <div class="button-keyword btn-dark" title="Fraction">1/2</div>
-        <div class="button-keyword btn-dark" title="Rule of three" id="ro3">RO3</div>
+        <div class="button-keyword btn-dark" title="Factorial">!</div>
       </div>
       <div class="row-keyword">
         <div class="button-keyword btn-dark" title="Prime Number">P</div>

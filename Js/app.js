@@ -1,5 +1,5 @@
 import Screen from "./Screen.js";
-import Keyword from "./Keyword.js";
+import Keyboard from "./Keyboard.js";
 import Multiply from "./Multiply.js";
 import Sum from "./sum.js";
 import Substract from "./Substract.js";
@@ -10,16 +10,17 @@ import Exponent from "./Exponent.js";
 import Square from "./Square.js";
 import Input from "./Input.js";
 import Descompose from "./Descompose.js";
+import Factorial from "./Factorial.js";
 const themeIcon = new Theme();
 document.body.appendChild(themeIcon.render());
 const theme = document.getElementById('theme');
 const root = document.getElementById('root');
 const screen = new Screen().render();
-const keyword = new Keyword().render();
+const keyboard = new Keyboard().render();
 const inputNumber1 = new Input;
 const inputNumber2 = new Input;
 root.appendChild(screen);
-root.appendChild(keyword);
+root.appendChild(keyboard);
 const buttons = document.querySelectorAll('.button-keyword');
 let operate = false;
 let operator = '';
@@ -240,6 +241,18 @@ buttons.forEach(btn => {
       }else if(btn.innerHTML === 'D'){ // Descomposing
         const numberToDescompose = new Descompose();
         screen.appendChild(numberToDescompose.render(numbersArray.join('')));
+      }else if(btn.innerHTML === '!'){
+        const factorialRender = document.createElement('span');
+        factorialRender.innerHTML = '!';
+        const factor = new Factorial(numbersArray.join(''));
+        numbersArray.push('!');
+        blockToRenderNumber1.appendChild(factorialRender);
+        screen.appendChild(blockToRenderNumber1);
+        screen.appendChild(separator());
+        const divFactorial = document.createElement('div');
+        divFactorial.className = 'result';
+        divFactorial.innerHTML = addThousandsSeparator(factor.render());
+        screen.appendChild(divFactorial);
       }
     });
 });
