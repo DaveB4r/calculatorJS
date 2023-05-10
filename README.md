@@ -22,10 +22,29 @@
 
 ### Screen Shots:
 
-![](https://github.com/DaveB4r/calculatorJS/blob/16b1edb9338d6cf9a63846070bc8e2bdb95e871e/assets/images/calculator.png)
-
 > Dark Theme.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/calculator.png)
 
-![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/calculatos_light.png)
 
 > Light Theme.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/calculatos_light.png)
+
+
+> Adding Example.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/adding.png)
+
+> Multiplying Example.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/multiplying.png)
+
+> Descomposing Example.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/descomposing.png)
+
+> Factorial Example.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/factorial.png)
+
+> Fibonacci Example.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/fibonacci.png)
+
+> Prime Factor Example.
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/prime.png)
+
