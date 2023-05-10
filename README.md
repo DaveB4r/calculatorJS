@@ -26,3 +26,6 @@
 
 > Dark Theme.
 
+![](https://github.com/DaveB4r/calculatorJS/blob/master/assets/images/calculatos_light.png)
+
+> Light Theme.
