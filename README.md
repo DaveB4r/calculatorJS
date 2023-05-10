@@ -15,16 +15,14 @@
 - You'll can obtain the power of a number.
 
 
-####To execute.
+#### To execute.
 
 `open with live server`
 
 
-###Screen Shots
-
-Image:
+### Screen Shots:
 
 ![](https://github.com/DaveB4r/calculatorJS/blob/16b1edb9338d6cf9a63846070bc8e2bdb95e871e/assets/images/calculator.png)
 
-> Follow your heart.
+> Dark Theme.
 
