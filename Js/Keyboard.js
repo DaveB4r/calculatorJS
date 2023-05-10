@@ -6,7 +6,7 @@ export default class Keyboard {
       <div class="row-keyword">
         <div class="button-keyword btn-dark" title="Clear">C</div>
         <div class="button-keyword btn-dark" title="Square Root">&#8730;</div>
-        <div class="button-keyword btn-dark" title="Fraction">1/2</div>
+        <div class="button-keyword btn-dark" title="Fibonacci">ƒ</div>
         <div class="button-keyword btn-dark" title="Factorial">!</div>
       </div>
       <div class="row-keyword">

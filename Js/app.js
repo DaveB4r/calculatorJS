@@ -11,6 +11,7 @@ import Square from "./Square.js";
 import Input from "./Input.js";
 import Descompose from "./Descompose.js";
 import Factorial from "./Factorial.js";
+import Fibonacci from "./Fibonacci.js";
 const themeIcon = new Theme();
 document.body.appendChild(themeIcon.render());
 const theme = document.getElementById('theme');
@@ -238,6 +239,13 @@ buttons.forEach(btn => {
       }else if(btn.innerHTML === 'P'){ // Prime Number
         const numberPrime = new Prime(numbersArray.join(''));
         screen.appendChild(numberPrime.render());
+      }else if(btn.innerHTML === 'ƒ'){
+        const numberFibo = new Fibonacci(numbersArray.join(''));
+        const divFibo = document.createElement('div');
+        divFibo.className = 'result';
+        divFibo.innerHTML = addThousandsSeparator(numberFibo.render());
+        screen.appendChild(separator());
+        screen.appendChild(divFibo);
       }else if(btn.innerHTML === 'D'){ // Descomposing
         const numberToDescompose = new Descompose();
         screen.appendChild(numberToDescompose.render(numbersArray.join('')));
